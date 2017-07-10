@@ -4,6 +4,8 @@
 <dict>
 	<key>bundleid</key>
 	<string>ianisted.newfile</string>
+	<key>category</key>
+	<string>Productivity</string>
 	<key>connections</key>
 	<dict>
 		<key>71877AC7-C39E-455F-8D7D-721D2E1174B1</key>
@@ -15,6 +17,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 		<key>9FFECD41-C050-4653-8470-CE41933FD977</key>
@@ -26,10 +30,23 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 		<key>FC9F751E-52A1-4409-BF5C-34E35A306656</key>
-		<array/>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>7F9AEB5E-473E-4898-A0E1-333AAF118320</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 	</dict>
 	<key>createdby</key>
 	<string>Ian Isted &amp; Chris Kalafarski</string>
@@ -59,10 +76,14 @@
 			<string>alfred.workflow.input.keyword</string>
 			<key>uid</key>
 			<string>71877AC7-C39E-455F-8D7D-721D2E1174B1</string>
+			<key>version</key>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>concurrently</key>
+				<false/>
 				<key>escaping</key>
 				<integer>54</integer>
 				<key>script</key>
@@ -74,24 +95,39 @@ filename = 'untitled'
 extension = 'txt'
 
 if '{query}' == 'help' || '{query}' == '?'
-	system("open", "http://ianisted.co.uk/new-finder-file-alfred-2")
-	exit
+    system("open", "http://ianisted.co.uk/new-finder-file-alfred-2")
+    exit
 else
-	if '{query}' &amp;&amp; '{query}'.include?(?.)
-	  filename = '{query}'.split('.')[0]
-	  extension = '{query}'.split('.')[1]
-	end
-	
-	file = [filename, extension].join('.')
-	path = [activeFinderPath, file].join
-	
-	template = [extension, extension].join('.')
-	if (File.exists?("templates/#{template}"))
-	  system(%[cp "templates/#{template}" "#{path}"])
-	else
-	  system(%[touch "#{path}"])
-	end
+    if '{query}' != ''
+        if '{query}'.start_with?('.')
+            extension = '{query}'.split('.')[1]
+        elsif '{query}'.include?(?.)
+            filename = '{query}'.split('.')[0]
+            extension = '{query}'.split('.')[1]
+        else
+            filename = '{query}'
+        end
+    end
+    
+    file = [filename, extension].join('.')
+    path = [activeFinderPath, file].join
+    
+    if (File.exists?("#{path}"))
+        puts file + " already exist!"
+        exit
+    end
+    
+    template = [extension, extension].join('.')
+    if (File.exists?("templates/#{template}"))
+        system(%[cp "templates/#{template}" "#{path}"])
+    else
+        system(%[touch "#{path}"])
+    end
 end</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
 				<key>type</key>
 				<integer>2</integer>
 			</dict>
@@ -99,6 +135,29 @@ end</string>
 			<string>alfred.workflow.action.script</string>
 			<key>uid</key>
 			<string>FC9F751E-52A1-4409-BF5C-34E35A306656</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<true/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string></string>
+				<key>title</key>
+				<string>{query}</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>7F9AEB5E-473E-4898-A0E1-333AAF118320</string>
+			<key>version</key>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -107,25 +166,31 @@ end</string>
 				<integer>0</integer>
 				<key>argument</key>
 				<integer>0</integer>
+				<key>focusedappvariable</key>
+				<false/>
+				<key>focusedappvariablename</key>
+				<string></string>
 				<key>hotkey</key>
-				<integer>45</integer>
+				<integer>0</integer>
 				<key>hotmod</key>
-				<integer>786432</integer>
-				<key>hotstring</key>
-				<string>N</string>
+				<integer>0</integer>
 				<key>leftcursor</key>
 				<false/>
 				<key>modsmode</key>
+				<integer>0</integer>
+				<key>relatedAppsMode</key>
 				<integer>0</integer>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.trigger.hotkey</string>
 			<key>uid</key>
 			<string>9FFECD41-C050-4653-8470-CE41933FD977</string>
+			<key>version</key>
+			<integer>2</integer>
 		</dict>
 	</array>
 	<key>readme</key>
-	<string>Create new file, v3.0:
+	<string>Create new file, v3.1.1:
 http://ianisted.co.uk/new-finder-file-alfred-2
 
 ---
@@ -137,25 +202,44 @@ If you want to use templates for new files, create a file with the format "exten
 ---
 
 Created by Ian Isted (http://ianisted.co.uk)
-Thanks to Chris Kalafarski (http://awholenother.com)</string>
+Thanks to Chris Kalafarski (http://awholenother.com)
+
+
+modified by @cgjosephlee
+https://github.com/cgjosephlee</string>
 	<key>uidata</key>
 	<dict>
 		<key>71877AC7-C39E-455F-8D7D-721D2E1174B1</key>
 		<dict>
+			<key>xpos</key>
+			<integer>280</integer>
 			<key>ypos</key>
-			<real>10</real>
+			<integer>10</integer>
+		</dict>
+		<key>7F9AEB5E-473E-4898-A0E1-333AAF118320</key>
+		<dict>
+			<key>xpos</key>
+			<integer>650</integer>
+			<key>ypos</key>
+			<integer>10</integer>
 		</dict>
 		<key>9FFECD41-C050-4653-8470-CE41933FD977</key>
 		<dict>
+			<key>xpos</key>
+			<integer>100</integer>
 			<key>ypos</key>
 			<real>10</real>
 		</dict>
 		<key>FC9F751E-52A1-4409-BF5C-34E35A306656</key>
 		<dict>
+			<key>xpos</key>
+			<integer>470</integer>
 			<key>ypos</key>
-			<real>10</real>
+			<integer>10</integer>
 		</dict>
 	</dict>
+	<key>version</key>
+	<string>3.1.1</string>
 	<key>webaddress</key>
 	<string>http://ianisted.co.uk/new-finder-file-alfred-2</string>
 </dict>
