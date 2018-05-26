@@ -18,7 +18,13 @@ Example:
 
 Create **ultitled.extention**
 
+### Customize templates
+You can put new templates in `template/extension.extension`, e.g. `docx.docx`, `html.html`
+
 ## Changelog
+### v3.1.2
+* fix filename with multiple '.'
+
 ### v3.1.1
 *Forked by @cgjosephlee*
 
@@ -26,3 +32,7 @@ Create **ultitled.extention**
 * Add error post-notification
 * Add .docx template
 * Add several query syntaxes
+
+## Credit
+Created by Ian Isted & Chris Kalafarski
+http://ianisted.co.uk/new-finder-file-alfred-2
