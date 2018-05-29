@@ -1,6 +1,8 @@
 # Create New File in Finder
 An alfred workflow
 
+![demo](https://thumbs.gfycat.com/NauticalSardonicAbyssiniancat-size_restricted.gif)
+
 ## Usage
 `new`:
 
@@ -18,12 +20,15 @@ Example:
 
 Create **ultitled.extention**
 
-### Customize templates
+# Customize templates
 You can put new templates in `template/extension.extension`, e.g. `docx.docx`, `html.html`
 
 ## Changelog
+### v3.2
+* Clean up and make a release
+
 ### v3.1.2
-* fix filename with multiple '.'
+* Fix filename with multiple '.'
 
 ### v3.1.1
 *Forked by @cgjosephlee*
